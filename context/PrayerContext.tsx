@@ -102,9 +102,18 @@ export const PrayerProvider: React.FC<ChildrenProps> = ({ children }) => {
   }
 
   async function handleSinglePrayerDelete(prayerTitle: string) {
-    setUserPrayerList(prevList =>
-      prevList.filter(item => item !== prayerTitle),
+    const prayerListUpdated = userPrayerList.filter(
+      item => item !== prayerTitle,
     );
+
+    await AsyncStorage.removeItem('userPrayerList');
+
+    await AsyncStorage.setItem(
+      'userPrayerList',
+      JSON.stringify(prayerListUpdated),
+    );
+
+    setUserPrayerList(prayerListUpdated);
   }
 
   return (

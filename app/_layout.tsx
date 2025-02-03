@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
@@ -8,10 +8,27 @@ import { Stack } from 'expo-router/stack';
 import CustomHeader from '@/components/Header';
 import { PrayerProvider } from '@/context/PrayerContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
+import * as SplashScreen from 'expo-splash-screen';
 
 // This function was created to make sure that SafeAreaView updates according to the theme
 // If SafeAreaView is nested inside ThemeProvider it doesn't work
 function LayoutContent() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        await SplashScreen.hideAsync();
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    prepare();
+  }, []);
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular: require('../assets/fonts/Poppins-Regular.ttf'),
     Poppins_700Bold: require('../assets/fonts/Poppins-Bold.ttf'),
